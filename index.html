@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lolol</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="images/Favicon.png">
+</head>
+<body>
+    <div id="navbar-placeholder">
+    </div>
+    <div id="upload-container">
+        <!-- HTML -->
+        <input type="text" id="nftName" placeholder="Enter NFT Name">
+        <input type="text" id="nftDescription" placeholder="Enter NFT Description">
+        <input type="file" id="nftImage" accept="image/*">
+        <button id="uploadAndMintButton">Upload and Mint NFT</button>
+
+        <button id="connectWalletButton">Connect Wallet</button>
+    </div>
+
+    <!-- Add a container for the button and the NFTs -->
+    <div id="nft-container">
+        <button id="displayNFTsButton">Display My NFTs</button>
+        <div id="nft-display-container"></div>
+    </div>
+
+    <!-- Update Functionality -->
+    <div id="update-container">
+        <input type="number" id="updateTokenId" placeholder="Enter Token ID">
+        
+        <!-- New fields for updating NFT metadata -->
+        <input type="text" id="newNftName" placeholder="Enter New NFT Name">
+        <input type="text" id="newNftDescription" placeholder="Enter New NFT Description">
+        <input type="file" id="newNftImage" accept="image/*">
+
+        <button id="updateTokenButton">Update NFT</button>
+    </div>
+
+
+    <!-- Delete (Burn) Functionality -->
+    <div id="burn-container">
+        <input type="number" id="burnTokenId" placeholder="Enter Token ID">
+        <button id="burnTokenButton">Burn NFT</button>
+    </div>
+
+    <div id="footer-placeholder">
+
+    </div>
+
+
+    <!-- Include ipfs-http-client library from a CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/ipfs-http-client/dist/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+    <script src="app.js"></script>
+    <script src="load-content.js"></script>
+</body>
+</html>
+
+
