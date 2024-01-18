@@ -982,3 +982,29 @@ async function displayAllNFTs() {
         console.error('Error fetching all NFTs:', error);
     }
 }
+
+// Function to grant access to view an NFT
+async function grantNFTAccess(tokenId, addressToGrant) {
+    const accounts = await web3.eth.getAccounts();
+    await contract.methods.grantAccess(tokenId, addressToGrant).send({ from: accounts[0] });
+}
+
+// Function to revoke access to view an NFT
+async function revokeNFTAccess(tokenId, addressToRevoke) {
+    const accounts = await web3.eth.getAccounts();
+    await contract.methods.revokeAccess(tokenId, addressToRevoke).send({ from: accounts[0] });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('grantAccessButton').addEventListener('click', async () => {
+        const tokenId = document.getElementById('tokenIdInput').value;
+        const addressToGrant = document.getElementById('addressInput').value;
+        await grantNFTAccess(tokenId, addressToGrant);
+    });
+
+document.getElementById('revokeAccessButton').addEventListener('click', async () => {
+        const tokenId = document.getElementById('tokenIdInput').value;
+        const addressToRevoke = document.getElementById('addressInput').value;
+        await revokeNFTAccess(tokenId, addressToRevoke);
+    });
+});
