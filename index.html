@@ -35,8 +35,6 @@
         <input type="text" id="nftDescription" placeholder="Enter NFT Description">
         <input type="file" id="nftImage" accept="image/*">
         <button id="uploadAndMintButton">Upload and Mint NFT</button>
-
-        <button id="connectWalletButton">Connect Wallet</button>
     </div>
 
     <!-- Add a container for the button and the NFTs -->
@@ -64,16 +62,17 @@
         <button id="burnTokenButton">Burn NFT</button>
     </div>
 
-    <div id="footer-placeholder">
-
-    </div>
+    <!-- Footer content -->
+    <footer class="footer">
+        <p>© 2023 NFT Dapp. All rights reserved.</p>
+        <p>Follow us on <a href="#">Twitter</a> | <a href="#">Instagram</a></p>
+    </footer>
 
 
     <!-- Include ipfs-http-client library from a CDN -->
     <script src="https://cdn.jsdelivr.net/npm/ipfs-http-client/dist/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
     <script src="app.js"></script>
-    <script src="load-content.js"></script>
 </body>
 </html>
 
