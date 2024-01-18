@@ -69,6 +69,14 @@ body {
     text-decoration: none;
 }
 
+/* NFT Image Styles */
+img {
+    width: 200px !important; /* Fixed width for images */
+    height: 200px !important; /* Fixed height for images */
+    object-fit: cover !important; /* Ensures the image covers the area without stretching */
+}
+
+
 /* Responsive Navbar */
 @media screen and (max-width: 768px) {
     .navbar ul.nav-links {
@@ -119,11 +127,4 @@ body {
 
 .toggle .line3 {
     transform: rotate(45deg) translate(-5px, -6px);
-}
-
-/* NFT Image Styles */
-.nft-container img {
-    width: 200px; /* Fixed width for images */
-    height: 200px; /* Fixed height for images */
-    object-fit: cover; /* Ensures the image covers the area without stretching */
 }
