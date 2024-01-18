@@ -8,27 +8,7 @@
     <link rel="icon" type="image/png" href="images/Favicon.png">
 </head>
 <body>
-    <!-- Navbar content -->
-    <nav class="navbar">
-        <div class="logo">
-            <img id="yourlogo" src="images/favicon.png" alt="Your Logo">
-        </div>
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="mint.html">Mint NFT</a></li>
-            <li><a href="all-nfts.html">All NFTs</a></li>
-            <li><a href="update.html">Update NFT</a></li>
-            <li><a href="burn.html">Burn NFT</a></li>
-        </ul>
-        <button id="connectWalletButton" class="wallet-btn">Connect Wallet</button>
-        <div class="burger">
-            <div class="line1"></div>
-            <div class="line2"></div>
-            <div class="line3"></div>
-        </div>
-    </nav>
-    <div id="navbar-placeholder">
-    </div>
+    <div id="navbar-placeholder"></div>
     <div id="upload-container">
         <!-- HTML -->
         <input type="text" id="nftName" placeholder="Enter NFT Name">
@@ -62,17 +42,14 @@
         <button id="burnTokenButton">Burn NFT</button>
     </div>
 
-    <!-- Footer content -->
-    <footer class="footer">
-        <p>© 2023 NFT Dapp. All rights reserved.</p>
-        <p>Follow us on <a href="#">Twitter</a> | <a href="#">Instagram</a></p>
-    </footer>
+    <div id="footer-placeholder"></div>
 
 
     <!-- Include ipfs-http-client library from a CDN -->
     <script src="https://cdn.jsdelivr.net/npm/ipfs-http-client/dist/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
     <script src="app.js"></script>
+    <script src="navfoot.js"></script>
 </body>
 </html>
 

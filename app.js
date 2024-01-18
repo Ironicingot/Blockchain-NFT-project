@@ -58,6 +58,7 @@ async function displayNFT(tokenId) {
 
 // Initialize the contract with ABI and address
 function initializeContract() {
+
     const abi = [
         {
             "inputs": [
@@ -731,29 +732,16 @@ function initializeContract() {
     const contractAddress = '0xaac7d6bbd3554a92f1f94e5fb26e84c259aedc34'; // Replace with your contract's address
 
     contract = new web3.eth.Contract(abi, contractAddress);
+
 }
 
+window.initializeContract = initializeContract;
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Connect Wallet Button
-    document.getElementById('connectWalletButton').addEventListener('click', async () => {
-        if (window.ethereum) {
-            web3 = new Web3(window.ethereum);
-            try {
-                await ethereum.request({ method: 'eth_requestAccounts' });
-                console.log('Ethereum successfully detected!');
-                initializeContract();
-                document.getElementById('connectWalletButton').innerText = 'Wallet Connected';
-            } catch (error) {
-                console.error('User denied account access...', error);
-            }
-        } else {
-            console.log('Non-Ethereum browser detected. Consider MetaMask!');
-        }
-    });
+// Upload and Mint Button
+const uploadAndMintButton = document.getElementById('uploadAndMintButton');
 
-    // Upload and Mint Button
-    document.getElementById('uploadAndMintButton').addEventListener('click', async () => {
+if (uploadAndMintButton) {
+    uploadAndMintButton.addEventListener('click', async () => {
         if (!web3) {
             console.error('Web3 is not initialized.');
             return;
@@ -792,27 +780,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             }
 
-            //console.log(`IPFS CID for metadata.json: ${metadataCID}`);
-
             const accounts = await web3.eth.getAccounts();
             const senderAddress = accounts[0];
 
             const mintResult = await contract.methods.mint(senderAddress, `ipfs://${metadataCID}`).send({
                 from: senderAddress,
             });
-            
+
             console.log('NFT Minted successfully!');
-            
             const tokenId = mintResult.events.Transfer.returnValues.tokenId;
             displayNFT(tokenId);
         } catch (error) {
             console.error('Error minting NFT:', error);
         }
     });
-});
+}
+
 
 // Displaying minted NFTs
-document.getElementById('displayNFTsButton').addEventListener('click', async () => {
+const displayNFTsButton = document.getElementById('displayNFTsButton');
+
+if (displayNFTsButton) {
+    displayNFTsButton.addEventListener('click', async () => {
     try {
         const accounts = await web3.eth.getAccounts();
         const ownerAddress = accounts[0];
@@ -855,13 +844,15 @@ document.getElementById('displayNFTsButton').addEventListener('click', async () 
         }
     } catch (error) {
         console.error('Error displaying NFTs:', error);
-    }
-});
-
-
+        }
+    });
+}
 
 // Updating NFT token URI
-document.getElementById('updateTokenButton').addEventListener('click', async () => {
+const updateTokenButton = document.getElementById('updateTokenButton');
+
+if (updateTokenButton) {
+    updateTokenButton.addEventListener('click', async () => {
     const tokenId = document.getElementById('updateTokenId').value;
     const nftName = document.getElementById('newNftName').value;
     const nftDescription = document.getElementById('newNftDescription').value;
@@ -901,12 +892,15 @@ document.getElementById('updateTokenButton').addEventListener('click', async () 
         console.log(`NFT ${tokenId} updated successfully!`);
     } catch (error) {
         console.error('Error updating NFT:', error);
-    }
-});
-
+        }
+    });
+}
 
 // Burning (deleting) an NFT
-document.getElementById('burnTokenButton').addEventListener('click', async () => {
+const burnTokenButton = document.getElementById('burnTokenButton');
+
+if (burnTokenButton) {
+    burnTokenButton.addEventListener('click', async () => {
     const tokenId = document.getElementById('burnTokenId').value;
 
     try {
@@ -915,6 +909,40 @@ document.getElementById('burnTokenButton').addEventListener('click', async () =>
         console.log(`NFT ${tokenId} burned successfully!`);
     } catch (error) {
         console.error('Error burning NFT:', error);
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    if (window.ethereum) {
+        web3 = new Web3(window.ethereum);
+        await ethereum.request({ method: 'eth_requestAccounts' });
+        initializeContract();
+
+        if (window.location.pathname.endsWith('all-nfts.html')) {
+            displayAllNFTs();
+        }
+    } else {
+        console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
     }
 });
 
+async function displayAllNFTs() {
+    if (!web3 || !contract) {
+        console.error('Web3 or contract not initialized.');
+        return;
+    }
+
+    try {
+        const totalSupply = await contract.methods.totalSupply().call();
+        console.log(`Total Supply: ${totalSupply}`);
+        
+        for (let i = 0; i < totalSupply; i++) {
+            const tokenId = await contract.methods.tokenByIndex(i).call();
+            console.log(`Displaying Token ID: ${tokenId}`);
+            displayNFT(tokenId);
+        }
+    } catch (error) {
+        console.error('Error fetching all NFTs:', error);
+    }
+}
