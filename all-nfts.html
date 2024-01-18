@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All NFTs</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navbar content here -->
+    <nav class="navbar">
+        <div class="logo">
+            <img id="yourlogo" src="images/favicon.png" alt="Your Logo">
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="mint.html">Mint NFT</a></li>
+            <li><a href="all-nfts.html">All NFTs</a></li>
+            <li><a href="update.html">Update NFT</a></li>
+            <li><a href="burn.html">Burn NFT</a></li>
+        </ul>
+        <button id="connectWalletButton" class="wallet-btn">Connect Wallet</button>
+        <div class="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+    <!-- Container for NFTs -->
+    <div id="all-nfts-container">
+        <!-- NFTs will be displayed here -->
+    </div>
+
+    <!-- Footer content -->
+    <footer class="footer">
+        <p>© 2023 NFT Dapp. All rights reserved.</p>
+        <p>Follow us on <a href="#">Twitter</a> | <a href="#">Instagram</a></p>
+    </footer>
+
+    <!-- Include necessary libraries and scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/ipfs-http-client/dist/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+    <script src="app.js"></script>
+    <script>
+        // Code to display all NFTs will go here
+        async function displayAllNFTs() {
+            if (!web3) {
+                console.error('Web3 is not initialized.');
+                return;
+            }
+            
+            try {
+                const totalSupply = await contract.methods.totalSupply().call();
+                
+                for (let i = 0; i < totalSupply; i++) {
+                    const tokenId = await contract.methods.tokenByIndex(i).call();
+                    displayNFT(tokenId);
+                }
+            } catch (error) {
+                console.error('Error fetching all NFTs:', error);
+            }
+        }
+
+        // Call the function when the page is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeContract();
+            displayAllNFTs();
+        });
+        
+    </script>
+</body>
+</html>
