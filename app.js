@@ -923,7 +923,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const storedAddress = urlParams.get('walletAddress') || localStorage.getItem('walletAddress');
 
         if (storedAddress) {
-            console.log('Stored address found:', storedAddress);
             updateWalletButtonText(storedAddress);  // Update button text
             initializeContract();
             if (window.location.pathname.endsWith('all-nfts.html')) {
