@@ -42,6 +42,24 @@
     <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
     <script src="app.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof web3 !== 'undefined') {
+                web3 = new Web3(web3.currentProvider);
+            } else {
+                console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+                return;
+            }
+
+            initializeContract();
+
+            if (document.getElementById('connectWalletButton')) {
+                document.getElementById('connectWalletButton').addEventListener('click', async () => {
+                    // Connect wallet logic here
+                });
+            }
+
+            displayAllNFTs();
+        });
         // Code to display all NFTs will go here
         async function displayAllNFTs() {
             if (!web3) {
