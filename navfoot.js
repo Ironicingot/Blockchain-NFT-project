@@ -28,25 +28,71 @@ function loadFooter() {
 // Initialize the wallet connection logic
 function initWalletButton() {
     const walletButton = document.getElementById('connectWalletButton');
-    if (walletButton) {
-        walletButton.addEventListener('click', async () => {
-            if (window.ethereum) {
-                web3 = new Web3(window.ethereum);
-                try {
-                    await ethereum.request({ method: 'eth_requestAccounts' });
-                    console.log('Ethereum successfully detected!');
-                    initializeContract();
-                    walletButton.innerText = 'Wallet Connected';
-                } catch (error) {
-                    console.error('User denied account access...', error);
-                }
-            } else {
-                console.log('Non-Ethereum browser detected. Consider MetaMask!');
+    const disconnectButton = document.getElementById('disconnectWalletButton');
+
+    // Function to reset the button state
+    function resetButtonState() {
+        walletButton.style.display = 'inline-block'; // Show "Connect Wallet" button
+        disconnectButton.style.display = 'none'; // Hide "Disconnect" button
+        disconnectButton.innerText = 'Disconnect';
+    }
+
+    walletButton.addEventListener('click', async () => {
+        if (window.ethereum) {
+            web3 = new Web3(window.ethereum);
+            try {
+                const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                const walletAddress = accounts[0]; // Get the first connected wallet address
+                console.log('Ethereum successfully detected!');
+                initializeContract();
+                walletButton.style.display = 'none'; // Hide "Connect Wallet" button
+                disconnectButton.style.display = 'inline-block'; // Show "Disconnect" button
+                disconnectButton.innerText = `Disconnect (${walletAddress})`;
+
+                // Store the wallet address in a cookie
+                Cookies.set('walletAddress', walletAddress, { expires: 365 }); // Set the cookie to expire in 1 year
+
+                disconnectButton.addEventListener('click', async () => {
+                    try {
+                        await ethereum.request({ method: 'eth_requestAccounts' });
+                        // Clear the wallet address cookie to simulate disconnection
+                        Cookies.remove('walletAddress');
+                        resetButtonState(); // Reset the button state
+                        // You can add further logic for handling disconnection if needed
+                    } catch (error) {
+                        console.error('User denied account access...', error);
+                    }
+                });
+            } catch (error) {
+                console.error('User denied account access...', error);
+            }
+        } else {
+            console.log('Non-Ethereum browser detected. Consider MetaMask!');
+        }
+    });
+
+    // Check if there is a wallet address stored in a cookie
+    const storedWalletAddress = Cookies.get('walletAddress');
+
+    if (storedWalletAddress) {
+        // If a wallet address is found in the cookie, automatically connect
+        walletButton.style.display = 'none';
+        disconnectButton.style.display = 'inline-block';
+        disconnectButton.innerText = `Disconnect (${storedWalletAddress})`;
+        initializeContract();
+
+        disconnectButton.addEventListener('click', async () => {
+            try {
+                await ethereum.request({ method: 'eth_requestAccounts' });
+                // Clear the wallet address cookie to simulate disconnection
+                Cookies.remove('walletAddress');
+                resetButtonState(); // Reset the button state
+                // You can add further logic for handling disconnection if needed
+            } catch (error) {
+                console.error('User denied account access...', error);
             }
         });
     }
-
-    // Add any other navbar-related initialization here
 }
 
 // Call the load functions
