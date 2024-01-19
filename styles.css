@@ -76,6 +76,11 @@ img {
     object-fit: cover !important; /* Ensures the image covers the area without stretching */
 }
 
+.nft-image {
+    /* Style for your NFT image */
+    filter: blur(5px); /* Adjust the blur as needed */
+}
+
 
 /* Responsive Navbar */
 @media screen and (max-width: 768px) {
