@@ -317,6 +317,19 @@ function initializeContract() {
             "type": "event"
         },
         {
+            "inputs": [],
+            "name": "accessFee",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
             "inputs": [
                 {
                     "internalType": "address",
@@ -380,6 +393,48 @@ function initializeContract() {
                     "internalType": "address",
                     "name": "",
                     "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "tokenId",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "address",
+                    "name": "user",
+                    "type": "address"
+                }
+            ],
+            "name": "grantAccess",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "tokenId",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "address",
+                    "name": "user",
+                    "type": "address"
+                }
+            ],
+            "name": "hasAccess",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
                 }
             ],
             "stateMutability": "view",
@@ -481,6 +536,24 @@ function initializeContract() {
         {
             "inputs": [],
             "name": "renounceOwnership",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "tokenId",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "address",
+                    "name": "user",
+                    "type": "address"
+                }
+            ],
+            "name": "revokeAccess",
             "outputs": [],
             "stateMutability": "nonpayable",
             "type": "function"
@@ -729,7 +802,7 @@ function initializeContract() {
             "type": "function"
         }
     ]; // Replace with your contract's ABI
-    const contractAddress = '0x6f0d249398935f618d0cf9b08c49d12a2a5826bd'; // Replace with your contract's address
+    const contractAddress = '0x2c30eaeb4a4b41aee835a1795a71bddf1a68cd04'; // Replace with your contract's address
 
     contract = new web3.eth.Contract(abi, contractAddress);
 
