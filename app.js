@@ -22,6 +22,8 @@ async function displayNFT(tokenId) {
         const imageSrc = `http://localhost:8080/ipfs/${metadataImageCid}`;
         nftImage.src = imageSrc;
         nftImage.alt = "NFT Image";
+        nftImage.className = 'nft-image'; // Add this line to apply the class
+
 
         // Create container for each NFT
         const nftContainer = document.createElement('div');
@@ -315,19 +317,6 @@ function initializeContract() {
             ],
             "name": "Transfer",
             "type": "event"
-        },
-        {
-            "inputs": [],
-            "name": "accessFee",
-            "outputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
         },
         {
             "inputs": [
@@ -643,6 +632,19 @@ function initializeContract() {
         {
             "inputs": [
                 {
+                    "internalType": "string",
+                    "name": "blurredBaseURI_",
+                    "type": "string"
+                }
+            ],
+            "name": "setBlurredBaseURI",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
                     "internalType": "bytes4",
                     "name": "interfaceId",
                     "type": "bytes4"
@@ -802,7 +804,7 @@ function initializeContract() {
             "type": "function"
         }
     ]; // Replace with your contract's ABI
-    const contractAddress = '0x2c30eaeb4a4b41aee835a1795a71bddf1a68cd04'; // Replace with your contract's address
+    const contractAddress = '0x8fc064efbc6ce345fdef809189af926cf0c54662'; // Replace with your contract's address
 
     contract = new web3.eth.Contract(abi, contractAddress);
 
