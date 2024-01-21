@@ -8,86 +8,73 @@ async function displayNFT(tokenId) {
         const tokenURI = await contract.methods.tokenURI(tokenId).call();
         const metadataURI = tokenURI.replace(/^ipfs:\/\//, '');
         const response = await fetch(`http://localhost:8080/ipfs/${metadataURI}`);
-        console.log('Metadata URI:', metadataURI);
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const metadata = await response.json();
+        const metadataImageCid = metadata.image.replace(/^ipfs:\/\//, '');
 
         // Create image element
         const nftImage = document.createElement('img');
-        const metadataImageCid = metadata.image.replace(/^ipfs:\/\//, '');
-        const imageSrc = `http://localhost:8080/ipfs/${metadataImageCid}`;
-        nftImage.src = imageSrc;
-        nftImage.alt = "NFT Image";
-        nftImage.className = 'nft-image'; // Add this line to apply the class
-        nftImage.style.filter = 'blur(5px)'; // Apply blur
+        nftImage.src = `http://localhost:8080/ipfs/${metadataImageCid}`;
+        nftImage.alt = 'NFT Image';
+        nftImage.className = 'nft-image';
 
         // Create container for each NFT
         const nftContainer = document.createElement('div');
-        nftContainer.className = 'nft-container'; // Add a class for styling
+        nftContainer.className = 'nft-container';
         nftContainer.appendChild(nftImage);
 
-        // Create and append token ID
+        // Append token ID, name, and description
         const tokenIdElement = document.createElement('p');
         tokenIdElement.textContent = `Token ID: ${tokenId}`;
         nftContainer.appendChild(tokenIdElement);
 
-        // Create and append name if it exists
         if (metadata.name) {
             const nameElement = document.createElement('p');
             nameElement.textContent = `Name: ${metadata.name}`;
             nftContainer.appendChild(nameElement);
         }
 
-        // Create and append description if it exists
         if (metadata.description) {
             const descriptionElement = document.createElement('p');
             descriptionElement.textContent = `Description: ${metadata.description}`;
             nftContainer.appendChild(descriptionElement);
         }
 
-        // Create Show Access button
+        // Access Check
+        const walletAddress = Cookies.get('walletAddress');
+        const ownerAddress = await contract.methods.ownerOf(tokenId).call();
+        const hasAccess = walletAddress 
+            ? (walletAddress.toLowerCase() === ownerAddress.toLowerCase()) || await contract.methods.hasAccess(tokenId, walletAddress).call()
+            : false;
+        nftImage.style.filter = hasAccess ? 'none' : 'blur(5px)';
+
+        // Show Access Button
         const showAccessButton = document.createElement('button');
         showAccessButton.innerText = 'Show Access';
-        showAccessButton.onclick = async () => {
-            const walletAddress = Cookies.get('walletAddress');
-            if (!walletAddress) {
-                alert('Please connect your wallet.');
-                return;
-            }
-
-            const hasAccess = await contract.methods.hasAccess(tokenId, walletAddress).call();
-            if (hasAccess) {
-                nftImage.style.filter = 'none'; // Unblur the image
-            } else {
-                alert('You do not have access to view this NFT.');
-            }
-        };
+        showAccessButton.addEventListener('click', async () => {
+            nftImage.style.filter = hasAccess ? 'none' : 'blur(5px)';
+        });
         nftContainer.appendChild(showAccessButton);
 
-        // Create Gain Access button
-        const gainAccessButton = document.createElement('button');
-        gainAccessButton.innerText = 'Gain Access';
-        gainAccessButton.onclick = async () => {
-            const walletAddress = Cookies.get('walletAddress');
-            if (!walletAddress) {
-                alert('Please connect your wallet.');
-                return;
-            }
-
-            try {
-                const accounts = await web3.eth.getAccounts();
-                await contract.methods.grantAccess(tokenId, walletAddress).send({ from: accounts[0] });
-                alert('Access granted successfully.');
-            } catch (error) {
-                console.error('Error granting access:', error);
-                alert('Error granting access.');
-            }
-        };
-        nftContainer.appendChild(gainAccessButton);
+        // Gain Access Button
+        if (walletAddress && walletAddress.toLowerCase() !== ownerAddress.toLowerCase()) {
+            const gainAccessButton = document.createElement('button');
+            gainAccessButton.innerText = 'Gain Access';
+            gainAccessButton.addEventListener('click', async () => {
+                try {
+                    const accounts = await web3.eth.getAccounts();
+                    await contract.methods.grantAccess(tokenId, walletAddress).send({ from: accounts[0] });
+                    nftImage.style.filter = 'none';
+                } catch (error) {
+                    console.error('Error granting access:', error);
+                }
+            });
+            nftContainer.appendChild(gainAccessButton);
+        }
 
         // Append the container to the display area
         document.getElementById('nft-display-container').appendChild(nftContainer);
@@ -96,8 +83,6 @@ async function displayNFT(tokenId) {
         console.error('Error displaying NFT:', error);
     }
 }
-
-
 
 // Initialize the contract with ABI and address
 function initializeContract() {
@@ -845,7 +830,7 @@ function initializeContract() {
             "type": "function"
         }
     ]; // Replace with your contract's ABI
-    const contractAddress = '0x8fc064efbc6ce345fdef809189af926cf0c54662'; // Replace with your contract's address
+    const contractAddress = '0x3172bd21f4f6da4bc2513adcb831a21329cb2239'; // Replace with your contract's address
 
     contract = new web3.eth.Contract(abi, contractAddress);
 
