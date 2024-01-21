@@ -12,6 +12,7 @@ function loadNavbar() {
         });
 }
 
+
 // Function to load the footer
 function loadFooter() {
     fetch('footer.html')
