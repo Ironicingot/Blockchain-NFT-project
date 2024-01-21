@@ -8,8 +8,6 @@ function loadNavbar() {
         });
 }
 
-<<<<<<< HEAD
-=======
 function initNavbar() {
     const burger = document.querySelector('.burger');
     const navbarLinks = document.querySelector('.navbar ul.nav-links');
@@ -26,10 +24,6 @@ function initNavbar() {
 }
 
 document.addEventListener('DOMContentLoaded', loadNavbar);
-
-
-
->>>>>>> d45db65ba75e2d079504db59666092106b5e3dcd
 
 // Function to load the footer
 function loadFooter() {
