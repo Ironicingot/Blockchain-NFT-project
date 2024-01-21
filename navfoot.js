@@ -1,16 +1,32 @@
-// Function to load the navbar and initialize related functionality
 function loadNavbar() {
     fetch('navbar.html')
         .then(response => response.text())
         .then(data => {
-            const navbarPlaceholder = document.getElementById('navbar-placeholder');
-            if (navbarPlaceholder) {
-                navbarPlaceholder.innerHTML = data;
-                initWalletButton();
-                // Any other initialization that depends on the navbar
-            }
+            document.getElementById('navbar-placeholder').innerHTML = data;
+            initNavbar();
+            initWalletButton(); // Initialize navbar functionality after it's loaded
         });
 }
+
+function initNavbar() {
+    const burger = document.querySelector('.burger');
+    const navbarLinks = document.querySelector('.navbar ul.nav-links');
+
+    if(burger && navbarLinks) { // Check if elements exist
+        burger.addEventListener('click', function () {
+            navbarLinks.classList.toggle('nav-active');
+            this.classList.toggle('toggle');
+        });
+    } else {
+        // Handle error: elements not found
+        console.error('Navbar elements not found');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', loadNavbar);
+
+
+
 
 // Function to load the footer
 function loadFooter() {

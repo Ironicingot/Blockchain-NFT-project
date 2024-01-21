@@ -1,7 +1,17 @@
 /* Add your styles here if needed */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
+    font-family: 'Roboto', sans-serif;
+    background: #1a1a1a; /* Dark background */
+    color: #fff; /* Light text */
+    line-height: 1.3;
 }
 
 #upload-container {
@@ -15,12 +25,11 @@ body {
 
 /* Navbar Styles */
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #333;
-    color: white;
+    background-color: #333; /* Dark background for navbar */
     padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 #yourlogo {
@@ -33,18 +42,30 @@ body {
     display: flex;
 }
 
+.navbar ul.nav-links {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 1rem; /* Adjust gap between nav items */
+}
+
 .navbar ul.nav-links li a {
     color: white;
     text-decoration: none;
-    padding: 0 1rem;
+    padding: 0.5rem 1rem; /* Adjust padding for better touch */
+    transition: color 0.3s ease-in-out;
 }
 
 .navbar ul.nav-links li {
     padding: 0.5rem 0;
 }
 
+.navbar ul.nav-links li a:hover {
+    color: #be5ce2; /* Golden color for hover state */
+}
+
 .burger {
-    display: none;
+    display: none; /* Hide burger menu on larger screens */
     cursor: pointer;
 }
 
@@ -56,24 +77,81 @@ body {
     transition: all 0.3s ease;
 }
 
+/* Main Hero Section */
+.hero-section {
+    text-align: center;
+    padding: 5rem 1rem; /* Adjust padding as needed */
+    background: #121212; /* Slightly lighter dark background for contrast */
+}
+
+.hero-section h1 {
+    color: #fff; /* Light text */
+    font-size: 3rem; /* Large font size for the main title */
+    margin-bottom: 1rem; /* Space below the title */
+}
+
+.hero-section p {
+    color: #aaa; /* Gray text for subtitle */
+    margin-bottom: 2rem; /* Space below the subtitle */
+}
+
+/* Buttons */
+.button-primary {
+    background-color: #ffd700; /* Golden background for primary button */
+    color: #000; /* Dark text for contrast */
+    padding: 1rem 2rem; /* Larger padding for buttons */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.button-primary:hover {
+    background-color: #e6c300; /* Slightly darker golden color on hover */
+}
+
+.button-secondary {
+    background-color: transparent; /* Transparent background for secondary button */
+    color: #fff; /* Light text */
+    padding: 1rem 2rem;
+    border: 1px solid #fff; /* White border */
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 0.5rem;
+    transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.button-secondary:hover {
+    border-color: #ffd700; /* Golden border on hover */
+}
+
 /* Footer Styles */
 .footer {
-    background-color: #333;
+    background-color: #333; /* Dark background for footer */
     color: white;
     text-align: center;
     padding: 1rem;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
 
 .footer a {
-    color: white;
+    color: #fff; /* Light text */
     text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer a:hover {
+    color: #d4af37; /* Golden color for hover state */
 }
 
 /* NFT Image Styles */
 img {
-    width: 200px !important; /* Fixed width for images */
-    height: 200px !important; /* Fixed height for images */
-    object-fit: cover !important; /* Ensures the image covers the area without stretching */
+    width: 200px; /* Fixed width for images */
+    height: 200px; /* Fixed height for images */
+    object-fit: cover; /* Ensures the image covers the area without stretching */
 }
 
 .nft-image {
@@ -81,70 +159,64 @@ img {
     filter: blur(5px); /* Adjust the blur as needed */
 }
 
-/* Styles for buttons */
+/* Button Styles */
 button {
-    margin: 5px;
     padding: 8px 16px;
+    background-color: #d4af37; /* Golden background for buttons */
+    color: #1a1a1a; /* Dark text for buttons */
     border: none;
-    background-color: #4CAF50;
-    color: white;
     border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #b3962f; /* Darker golden color on hover */
 }
 
 
 /* Responsive Navbar */
 @media screen and (max-width: 768px) {
-    .navbar ul.nav-links {
-        position: absolute;
-        right: 0px;
-        height: 92vh;
-        top: 8vh;
-        background-color: #333;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 50%;
-        transform: translateX(100%);
-        transition: transform 0.5s ease-in;
+    .navbar {
+        flex-wrap: wrap; /* Allows navbar items to wrap onto the next line */
     }
 
-    .nav-links li {
-        opacity: 0;
+    .navbar ul.nav-links {
+        position: fixed;
+        right: 0;
+        top: 60px; /* Height of the navbar */
+        background-color: #333;
+        flex-direction: column;
+        width: 100%; /* Full width */
+        height: calc(100vh - 60px); /* Full height minus the navbar */
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out;
+        padding-top: 1rem;
+        display: none; /* Hide by default, shown when nav-active */
+    }
+
+    .nav-active .navbar ul.nav-links {
+        display: flex; /* Show when nav-active */
+    }
+
+    .navbar ul.nav-links li {
+        opacity: 1;
+        margin: 10px 0; /* Add some vertical spacing */
     }
 
     .burger {
         display: block;
     }
-}
 
-.nav-active {
-    transform: translateX(0%);
-}
+    .nav-active .burger .line1 {
+        transform: rotate(-45deg) translate(-5px, 5px);
+    }
 
-@keyframes navLinkFade {
-    from {
+    .nav-active .burger .line2 {
         opacity: 0;
-        transform: translateX(50px);
     }
-    to {
-        opacity: 1;
-        transform: translateX(0px);
+
+    .nav-active .burger .line3 {
+        transform: rotate(45deg) translate(-5px, -5px);
     }
-}
-
-.toggle .line1 {
-    transform: rotate(-45deg) translate(-5px, 6px);
-}
-
-.toggle .line2 {
-    opacity: 0;
-}
-
-.toggle .line3 {
-    transform: rotate(45deg) translate(-5px, -6px);
 }
