@@ -23,7 +23,7 @@ async function displayNFT(tokenId) {
         nftImage.src = imageSrc;
         nftImage.alt = "NFT Image";
         nftImage.className = 'nft-image'; // Add this line to apply the class
-
+        nftImage.style.filter = 'blur(5px)'; // Apply blur
 
         // Create container for each NFT
         const nftContainer = document.createElement('div');
@@ -36,18 +36,58 @@ async function displayNFT(tokenId) {
         nftContainer.appendChild(tokenIdElement);
 
         // Create and append name if it exists
-        if(metadata.name) {
+        if (metadata.name) {
             const nameElement = document.createElement('p');
             nameElement.textContent = `Name: ${metadata.name}`;
             nftContainer.appendChild(nameElement);
         }
 
         // Create and append description if it exists
-        if(metadata.description) {
+        if (metadata.description) {
             const descriptionElement = document.createElement('p');
             descriptionElement.textContent = `Description: ${metadata.description}`;
             nftContainer.appendChild(descriptionElement);
         }
+
+        // Create Show Access button
+        const showAccessButton = document.createElement('button');
+        showAccessButton.innerText = 'Show Access';
+        showAccessButton.onclick = async () => {
+            const walletAddress = Cookies.get('walletAddress');
+            if (!walletAddress) {
+                alert('Please connect your wallet.');
+                return;
+            }
+
+            const hasAccess = await contract.methods.hasAccess(tokenId, walletAddress).call();
+            if (hasAccess) {
+                nftImage.style.filter = 'none'; // Unblur the image
+            } else {
+                alert('You do not have access to view this NFT.');
+            }
+        };
+        nftContainer.appendChild(showAccessButton);
+
+        // Create Gain Access button
+        const gainAccessButton = document.createElement('button');
+        gainAccessButton.innerText = 'Gain Access';
+        gainAccessButton.onclick = async () => {
+            const walletAddress = Cookies.get('walletAddress');
+            if (!walletAddress) {
+                alert('Please connect your wallet.');
+                return;
+            }
+
+            try {
+                const accounts = await web3.eth.getAccounts();
+                await contract.methods.grantAccess(tokenId, walletAddress).send({ from: accounts[0] });
+                alert('Access granted successfully.');
+            } catch (error) {
+                console.error('Error granting access:', error);
+                alert('Error granting access.');
+            }
+        };
+        nftContainer.appendChild(gainAccessButton);
 
         // Append the container to the display area
         document.getElementById('nft-display-container').appendChild(nftContainer);
@@ -56,6 +96,7 @@ async function displayNFT(tokenId) {
         console.error('Error displaying NFT:', error);
     }
 }
+
 
 
 // Initialize the contract with ABI and address
